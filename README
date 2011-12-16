@@ -2,6 +2,10 @@ Breadcrumbs component for Kohana 3.x
 
 Usage:
 
+Copy config/breadcrumbs.php to your app/config folder if you want to change config values:
+- separator
+- last link enabled
+
 Define somewhere your base item:
 
 Breadcrumbs::getInstance()->addItem('Home', Route::url('default'));
@@ -12,8 +16,6 @@ In the controller or in the view you can add more items:
 
 Breadcrumbs::getInstance()->addItem('Users list', Route::url('users-list'));
 Breadcrumbs::getInstance()->addItem('John Doe');
-
-Note: the last item is no-clickable
 
 Result:
 
