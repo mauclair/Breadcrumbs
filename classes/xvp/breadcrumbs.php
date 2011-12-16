@@ -67,7 +67,15 @@ class Xvp_Breadcrumbs
     public function render()
     {
         $view = View::factory($this->view);
-        $view->items = $this->items;
+        $view->items       = $this->items;
+        $view->items_count = count($this->items);
+        
+        $config = Kohana::$config->load('breadcrumbs');
+        
+        $view->separator     = $config['separator'];
+        $view->last_linkable = $config['last_linkable'];
+        
+        
         return $view->render();
     }
 }

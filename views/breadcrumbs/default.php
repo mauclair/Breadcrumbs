@@ -1,11 +1,10 @@
 <?php 
     $elements    = array();
-    $items_count = count($items);
 ?>
 
 <?php for($i = 0; $i < $items_count; $i++) : ?>
     <?php
-        if($i == ($items_count - 1)) {
+        if($i == ($items_count - 1) && $last_linkable == false) {
             $elements[] = ucfirst(__($items[$i]['label']));
         }
         else {
@@ -14,4 +13,4 @@
    ?>
 <?php endfor; ?>
 
-<?php echo join('&nbsp;&gt;&nbsp;', $elements); ?>
+<?php echo join($separator, $elements); ?>
