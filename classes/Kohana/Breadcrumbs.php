@@ -1,63 +1,68 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+/**
+ * Breadcrumbs core
+ */
 class Kohana_Breadcrumbs
 {
     /**
-     * Default view 
-     * @var string
+     * @var string Template name
      */
-    protected $view = 'breadcrumbs/default';
+    protected $_template = 'breadcrumbs';
     
     /**
-     * Singleton instance
-     * @var Xvp_Breadcrumbs
+     * Breadcrumbs instance
+     * @var Breadcrumbs
      */
-    protected static $instance;
+    protected static $_instance;
     
     /**
      * Stack of breadcrumb items
      * @var array
      */
-    protected $items = array();
-    
+    protected $_items = array();
+
+    protected $_active;
+
     /**
      * Constructor
-     * @return Xvp_Breadcrumbs
+     * @return object Breadcrumbs
      */
-    private function __construct() {}
-    
-    /**
-     * Get the unique instance
-     * @return Xvp_Breadcrumbs
-     */
-    public static function getInstance()
+    protected function __construct($_name)
     {
-        if(self::$instance === null) {
-            self::$instance = new Xvp_Breadcrumbs;
+        $this->_name = $_name;
+        $this->_config = Kohana::$config->load($_name);
+
+        $this->_items = array();
+
+        $this->_items[] = array(
+            'title' => 'Home',
+            'url'   => '/',
+        );
+
+        $this->_active = 0;
+    }
+
+    static public function instance($_name = 'breadcrumbs')
+    {
+        static $_instances;
+
+        if ( ! isset($_instances[$_name]))
+        {
+            $_instances[$_name] = new Breadcrumbs($_name);
         }
-        return self::$instance;
+
+        return $_instances[$_name];
     }
-    
-    /**
-     * Set the template name
-     * @param string $view 
-     */
-    public function setView($view)
+
+    public function add_item($title, $url, $active=FALSE)
     {
-        $this->view = $view;
-    }
-    
-    /**
-     * Add a new item to the breadcrumb stack
-     * @param string $label
-     * @param string $url
-     */
-    public function addItem($label, $url = null)
-    {
-        $this->items[] = array(
-            'label' => $label,
+        $this->_items[] = array(
+            'title' => $title,
             'url'   => $url,
         );
+
+        $this->_active = count($this->_items) - 1;
     }
     
     /**
@@ -66,16 +71,10 @@ class Kohana_Breadcrumbs
      */
     public function render()
     {
-        $view = View::factory($this->view);
-        $view->items       = $this->items;
-        $view->items_count = count($this->items);
-        
-        $config = Kohana::$config->load('breadcrumbs');
-        
-        $view->separator     = $config['separator'];
-        $view->last_linkable = $config['last_linkable'];
-        
-        
+        $view = View::factory($this->_template)
+            ->set('items', $this->_items)
+            ->set('active', $this->_active);
+
         return $view->render();
     }
 }
