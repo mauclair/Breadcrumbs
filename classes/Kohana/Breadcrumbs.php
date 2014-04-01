@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Xvp_Breadcrumbs
+class Kohana_Breadcrumbs
 {
     /**
      * Default view 
