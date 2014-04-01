@@ -1,3 +1,3 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Breadcrumbs extends Xvp_Breadcrumbs {}
+class Breadcrumbs extends Kohana_Breadcrumbs { }
